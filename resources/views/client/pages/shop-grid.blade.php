@@ -526,3 +526,7 @@
 </section>
 <!-- Product Section End -->
 @endsection
+
+@section('title')
+Shop Grid
+@endsection
