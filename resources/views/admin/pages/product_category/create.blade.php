@@ -13,12 +13,21 @@
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
+                {{ $errors ?? dd($errors->all()) }}
                 <form role="form" method="POST" action="{{ route('admin.product_category.store') }}">
                   <div class="card-body">
                     <div class="form-group">
                       <label for="name">Name</label>
                       <input type="text" name="name" class="form-control" id="name" placeholder="Enter name">
                         @error('name')
+                          <span style="color: red">{{ $message }}</span>
+                        @enderror
+                      
+                    </div>
+                    <div class="form-group">
+                      <label for="slug">Slug</label>
+                      <input type="text" name="slug" class="form-control" id="slug" placeholder="Enter slug">
+                        @error('slug')
                           <span style="color: red">{{ $message }}</span>
                         @enderror
                       
@@ -37,4 +46,28 @@
         </div>
       </section>
 </div>
+@endsection
+
+@section('js-custom')
+  <script type="text/javascript">
+    $(document).ready(function(){
+      //selector
+      $('#name').on('keyup', function(){
+        var nameValue = $(this).val();
+        
+        $.ajax({
+          method: 'POST', //method of form
+          url : '{{ route('admin.product_category.slug') }}', // action of form
+          data: {
+            name: nameValue,
+            _token: '{{ csrf_token() }}'
+          },
+          success: function(response){
+            //Fill data to input
+            $('#slug').val(response.slug);
+          }
+        });
+      });
+    });
+  </script>
 @endsection

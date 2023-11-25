@@ -16,3 +16,5 @@ Route::get('admin/product_category/create', [ProductCategoryController::class, '
 Route::post('admin/product_category/store', [ProductCategoryController::class, 'store'])
 ->name('admin.product_category.store');
 
+Route::post('admin/product_category/slug', [ProductCategoryController::class, 'createSlug'])
+->name('admin.product_category.slug');
