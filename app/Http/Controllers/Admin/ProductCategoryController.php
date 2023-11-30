@@ -8,12 +8,31 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-use function PHPSTORM_META\map;
-
 class ProductCategoryController extends Controller
 {
     public function index(){
-        return view('admin.pages.product_category.index');
+        //Cach 1 : SQL RAW
+        // $productCategoires = DB::select("select * from product_category");
+
+        //Cach 2 : Query Builder
+        // $productCategoires = DB::table('product_category')->select('*')->get();
+
+        //Cach 3 : Eloquent
+        $productCategories = ProductCategory::all();
+
+        //Cach 1 : Pass variable to view
+        return view('admin.pages.product_category.index', [
+            'productCategories' => $productCategories,
+            'test' => 'TEST'
+        ]);
+
+        //Cach 2 : Pass variable to view
+        // return view('admin.pages.product_category.index')
+        // ->with('productCategories', $productCategoires)
+        // ->with('test', 'TEST');
+
+        //Cach 2 : Pass variable to view
+        // return view('admin.pages.product_category.index', compact('productCategories'));
     }
 
     public function create(){
@@ -66,5 +85,37 @@ class ProductCategoryController extends Controller
         return response()->json([
             'slug' => Str::slug($request->name ?? '')
         ]);
+    }
+
+    public function destroy(Request $request, $id){
+        //Cach 1 : SQL RAW
+        // $check = DB::delete("DELETE FROM product_category WHERE id = ?", [$id]);
+
+        //Cach 2 : Query Builder
+        // $check = DB::table('product_category')->where('id', '=', $id)->delete();
+
+        //Cach 3 : Eloquent
+        // $check = ProductCategory::where('id', '=', $id)->delete();
+        // $check = ProductCategory::where('id', $id)->delete();
+        $check = ProductCategory::find($id)->delete();
+
+        $msg = $check ? 'xoa thanh cong' : 'xoa that bai';
+
+        return redirect()->route('admin.product_category')->with('msg', $msg);
+    }
+
+    public function detail($id) {
+        //Cach 1 : SQL RAW
+        // $productCategory = DB::select("SELECT * FROM product_category WHERE id = ?", [$id]);
+        // $productCategory = $productCategory[0];
+
+        //Cach 2 : Query Builder
+        // $productCategory = DB::table('product_category')->where('id', $id)->first();     
+        
+        //Cach 3 : Eloquent
+        // $productCategory = ProductCategory::find($id);
+        $productCategory = ProductCategory::findOrFail($id);
+
+        return view('admin.pages.product_category.detail')->with('productCategory', $productCategory);
     }
 }
