@@ -11,9 +11,9 @@ class ProductCategory extends Model
 
     protected $table = 'product_category';
 
-    //Filed allow insert into database
-    protected $fillable = ['name'];
+    //Field allow insert|update into database
+    protected $fillable = ['name', 'slug'];
 
-    //Filed NOT allow insert into database
+    //Field NOT allow insert|update into database
     // protected $guarded = [];
 }

@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="{{ asset('admin_public/plugins/fontawesome-free/css/all.min.css') }}">
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <link rel="stylesheet" href="//cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
   <!-- Tempusdominus Bbootstrap 4 -->
   <link rel="stylesheet" href="{{ asset('admin_public/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
   <!-- iCheck -->
@@ -137,6 +138,7 @@
 <script src="{{ asset('admin_public/dist/js/pages/dashboard.js') }}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{ asset('admin_public/dist/js/demo.js') }}"></script>
+<script src="//cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 
 @yield('js-custom')
 </body>

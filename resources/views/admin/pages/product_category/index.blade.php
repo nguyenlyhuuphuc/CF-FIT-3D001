@@ -36,11 +36,35 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Product Category List</h3>
+                <br>
+                <form action="{{ route('admin.product_category') }}" method="GET">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="slug">Keyword</label>
+                        <input value="{{ request()->get('keyword') }}" type="text" name="keyword" class="form-control" id="slug" placeholder="Enter keyword">
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="sortBy">Sort</label>
+                        <select name="sort" class="form-control" id="sortBy">
+                          <option value="">--- Please Select ---</option>
+                          <option {{ request()->get('sort') === 'latest' ? 'selected' : '' }} value="latest">Latest</option>
+                          <option {{ request()->get('sort') === 'oldest' ? 'selected' : '' }} value="oldest">Oldest</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                  </div>
+                </form>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
                 {{-- {{ dd($productCategories) }} --}}
-                <table class="table table-bordered">
+                <table class="table table-bordered" id="table-product-category">
                   <thead>                  
                     <tr>
                       <th>#</th>
@@ -51,8 +75,9 @@
                     </tr>
                   </thead>
                   <tbody>
-                    @forelse ($productCategories as $productCategogy)
+                    @forelse ($productCategories as $index => $productCategogy)
                       <tr>
+                        {{-- <td>{{ ($page - 1) * $itemPerPage + $index + 1 }}</td> --}}
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $productCategogy->name }}</td>
                         <td>{{ $productCategogy->slug }}</td>
@@ -75,13 +100,14 @@
               </div>
               <!-- /.card-body -->
               <div class="card-footer clearfix">
-                <ul class="pagination pagination-sm m-0 float-right">
-                  <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-                  <li class="page-item"><a class="page-link" href="#">1</a></li>
-                  <li class="page-item"><a class="page-link" href="#">2</a></li>
-                  <li class="page-item"><a class="page-link" href="#">3</a></li>
-                  <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
-                </ul>
+                {{-- <ul class="pagination pagination-sm m-0 float-right">
+                  <li class="page-item"><a class="page-link" href="#">&laquo;</a></li> --}}
+                    {{-- @for ($i = 1; $i <= $totalPage; $i++)
+                      <li class="page-item"><a class="page-link" href="?page={{ $i }}">{{ $i }}</a></li>  
+                    @endfor --}}
+                  {{-- <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+                </ul> --}}
+                {{ $productCategories->links() }}
               </div>
             </div>
             <!-- /.card -->
@@ -91,4 +117,12 @@
     </section>
     <!-- /.content -->
   </div>
+@endsection
+
+@section('js-custom')
+  <script>
+    // $(document).ready(function(){
+    //   let table = new DataTable('#table-product-category');
+    // });
+  </script>
 @endsection

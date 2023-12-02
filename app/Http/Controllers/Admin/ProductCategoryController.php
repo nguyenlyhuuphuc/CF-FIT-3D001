@@ -4,13 +4,34 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ProductCategory;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ProductCategoryController extends Controller
 {
-    public function index(){
+    public function indexPagination (Request $request){
+        $itemPerPage = 3;
+        $totalItems = DB::table('product_category')->count();
+        $totalPage = ceil($totalItems / $itemPerPage);
+        $page = $request->page ?? 1;
+
+        $index = ($page - 1) * $itemPerPage;
+        //limit 0,10
+        $productCategories = DB::table('product_category')
+        ->offset($index)
+        ->limit($itemPerPage)
+        ->get();
+
+        return view('admin.pages.product_category.index', [
+            'productCategories' => $productCategories,
+            'totalPage' => $totalPage,
+            'itemPerPage' => $itemPerPage,
+            'page' => $page
+        ]);
+    }
+    public function index(Request $request){
         //Cach 1 : SQL RAW
         // $productCategoires = DB::select("select * from product_category");
 
@@ -18,12 +39,26 @@ class ProductCategoryController extends Controller
         // $productCategoires = DB::table('product_category')->select('*')->get();
 
         //Cach 3 : Eloquent
-        $productCategories = ProductCategory::all();
+        // $productCategories = ProductCategory::all();
+
+        // $productCategories = DB::table('product_category')->paginate(5);
+        // $productCategoires = ProductCategory::paginate(5);
+        $keyword = $request->keyword ?? "";
+        $keyword = '%'.$keyword.'%';
+
+        $sort = $request->sort ?? 'latest';
+        $direction = $sort === 'latest' ? "DESC" : "ASC";
+
+        $productCategoires = DB::table('product_category')
+        ->where('name', 'like', $keyword)
+        ->orWhere('slug', 'like', $keyword)
+        ->orderBy('created_at', $direction)
+        ->paginate(5);
+        // $productCategories = ProductCategory::all();
 
         //Cach 1 : Pass variable to view
         return view('admin.pages.product_category.index', [
-            'productCategories' => $productCategories,
-            'test' => 'TEST'
+            'productCategories' => $productCategoires,
         ]);
 
         //Cach 2 : Pass variable to view
@@ -117,5 +152,34 @@ class ProductCategoryController extends Controller
         $productCategory = ProductCategory::findOrFail($id);
 
         return view('admin.pages.product_category.detail')->with('productCategory', $productCategory);
+    }
+
+    public function update(Request $request, $id){
+        //Find record
+        //Query Builder
+        // $productCategory = DB::table('product_category')
+        // ->where('id', '=', $id)
+        // ->update([
+        //     'name' => $request->name,
+        //     'slug' => $request->slug,
+        //     'updated_at' => Carbon::now()
+        // ]);
+
+        //Eloquent
+        // $productCategory = ProductCategory::find($id);
+        // $productCategory->name = $request->name;
+        // $productCategory->slug = $request->slug;
+        // $productCategory->updated_at = Carbon::now();
+        // $productCategory->save();
+
+        //ELoquent Mass Assignment
+        $productCategory = ProductCategory::find($id)
+        ->update([
+            'name' => $request->name,
+            'slug' => $request->slug,
+        ]);
+
+        //Redirect List with flash session
+        return redirect()->route('admin.product_category')->with('msg', 'Update thanh cong');
     }
 }

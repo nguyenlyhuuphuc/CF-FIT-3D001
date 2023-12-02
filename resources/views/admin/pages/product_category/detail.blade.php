@@ -14,7 +14,7 @@
                 <!-- /.card-header -->
                 <!-- form start -->
                 {{ $errors ?? dd($errors->all()) }}
-                <form role="form" method="POST" action="{{ route('admin.product_category.store') }}">
+                <form role="form" method="POST" action="{{ route('admin.product_category.update', ['id' => $productCategory->id ]) }}">
                   <div class="card-body">
                     <div class="form-group">
                       <label for="name">Name</label>
