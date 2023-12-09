@@ -14,11 +14,11 @@
                 <!-- /.card-header -->
                 <!-- form start -->
                 {{ $errors ?? dd($errors->all()) }}
-                <form role="form" method="POST" action="{{ route('admin.product_category.store') }}">
+                <form role="form" method="POST" action="{{ route('admin.product.store') }}" enctype="multipart/form-data">
                   <div class="card-body">
                     <div class="form-group">
                       <label for="name">Name</label>
-                      <input type="text" name="name" class="form-control" id="name" placeholder="Enter name">
+                      <input value="{{ old('name') }}" type="text" name="name" class="form-control" id="name" placeholder="Enter name">
                         @error('name')
                           <span style="color: red">{{ $message }}</span>
                         @enderror
@@ -26,35 +26,35 @@
                     </div>
                     <div class="form-group">
                       <label for="price">Price</label>
-                      <input type="number" name="price" class="form-control" id="price" placeholder="Enter price">
+                      <input value="{{ old('price') }}" type="number" name="price" class="form-control" id="price" placeholder="Enter price">
                         @error('price')
                           <span style="color: red">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="form-group">
                       <label for="short_description">Short Description</label>
-                      <textarea class="form-control" name="short_description"></textarea>
+                      <textarea id="short_description" class="form-control" name="short_description">{{ old('short_description') }}</textarea>
                         @error('short_description')
                           <span style="color: red">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="form-group">
                       <label for="description">Description</label>
-                      <textarea class="form-control" name="description"></textarea>
+                      <textarea id="description" class="form-control" name="description">{{ old('short_description') }}</textarea>
                         @error('description')
                           <span style="color: red">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="form-group">
                       <label for="qty">Qty</label>
-                      <input type="number" name="qty" class="form-control" id="qty" placeholder="Enter qty">
+                      <input value="{{ old('qty') }}" type="number" name="qty" class="form-control" id="qty" placeholder="Enter qty">
                         @error('qty')
                           <span style="color: red">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="form-group">
                       <label for="weight">Weight</label>
-                      <input type="number" name="weight" class="form-control" id="weight" placeholder="Enter weight">
+                      <input value="{{ old('weight') }}" type="number" name="weight" class="form-control" id="weight" placeholder="Enter weight">
                         @error('weight')
                           <span style="color: red">{{ $message }}</span>
                         @enderror
@@ -71,8 +71,8 @@
                       <label for="status">Status</label>
                       <select class="form-control" name="status" id="status">
                           <option value="">---Please Select---</option>
-                          <option value="0">Show</option>
-                          <option value="1">Hide</option>
+                          <option {{ old('status') == '0' ? 'selected' : '' }} value="0">Show</option>
+                          <option {{ old('status') == '1' ? 'selected' : '' }} value="1">Hide</option>
                       </select>
                         @error('status')
                           <span style="color: red">{{ $message }}</span>
@@ -82,7 +82,9 @@
                       <label for="product_category_id">Product Category</label>
                       <select class="form-control" name="product_category_id" id="product_category_id">
                           <option value="">---Please Select---</option>
-                          <option value="?">Category</option>
+                          @foreach ($productCategories as $productCategory)
+                            <option {{ old('product_category_id') == $productCategory->id ? 'selected' : '' }} value="{{ $productCategory->id }}">{{ $productCategory->name }}</option>  
+                          @endforeach
                       </select>
                         @error('product_category_id')
                           <span style="color: red">{{ $message }}</span>
@@ -107,23 +109,25 @@
 @section('js-custom')
   <script type="text/javascript">
     $(document).ready(function(){
-      //selector
-      $('#name').on('keyup', function(){
-        var nameValue = $(this).val();
-        
-        $.ajax({
-          method: 'POST', //method of form
-          url : '{{ route('admin.product_category.slug') }}', // action of form
-          data: {
-            name: nameValue,
-            _token: '{{ csrf_token() }}'
-          },
-          success: function(response){
-            //Fill data to input
-            $('#slug').val(response.slug);
+      ClassicEditor
+        .create( document.querySelector( '#description' ), {
+          ckfinder: {
+              uploadUrl: '{{route('admin.product.image.upload').'?_token='.csrf_token()}}',
           }
-        });
-      });
+        } )
+        .catch( error => {
+            console.error( error );
+        } );
+
+      ClassicEditor
+        .create( document.querySelector( '#short_description' ), {
+          ckfinder: {
+              uploadUrl: '{{route('admin.product.image.upload').'?_token='.csrf_token()}}',
+          }
+        } )
+        .catch( error => {
+            console.error( error );
+        } );
     });
   </script>
 @endsection

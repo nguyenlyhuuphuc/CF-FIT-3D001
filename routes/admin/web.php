@@ -23,4 +23,6 @@ Route::prefix('admin')->middleware('check.is.admin')->name('admin.')->group(func
     });
 
     Route::resource('product', ProductController::class);
+
+    Route::post('product-upload-image',[ProductController::class, 'uploadImage'])->name('product.image.upload');
 });

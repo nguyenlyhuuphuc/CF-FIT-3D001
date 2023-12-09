@@ -106,6 +106,7 @@
 
 <!-- jQuery -->
 <script src="{{ asset('admin_public/plugins/jquery/jquery.min.js') }}"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/40.1.0/classic/ckeditor.js"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="{{ asset('admin_public/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
@@ -119,8 +120,8 @@
 <!-- Sparkline -->
 <script src="{{ asset('admin_public/plugins/sparklines/sparkline.js') }}"></script>
 <!-- JQVMap -->
-<script src="{{ asset('admin_public/plugins/jqvmap/jquery.vmap.min.js') }}"></script>
-<script src="{{ asset('admin_public/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
+{{-- <script src="{{ asset('admin_public/plugins/jqvmap/jquery.vmap.min.js') }}"></script>
+<script src="{{ asset('admin_public/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script> --}}
 <!-- jQuery Knob Chart -->
 <script src="{{ asset('admin_public/plugins/jquery-knob/jquery.knob.min.js') }}"></script>
 <!-- daterangepicker -->
@@ -139,6 +140,7 @@
 <!-- AdminLTE for demo purposes -->
 <script src="{{ asset('admin_public/dist/js/demo.js') }}"></script>
 <script src="//cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+
 
 @yield('js-custom')
 </body>
