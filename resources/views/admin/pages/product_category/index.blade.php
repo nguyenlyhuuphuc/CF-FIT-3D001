@@ -79,7 +79,7 @@
                       <tr>
                         {{-- <td>{{ ($page - 1) * $itemPerPage + $index + 1 }}</td> --}}
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $productCategogy->name }}</td>
+                        <td>{{ $productCategogy->name.' child(' .$productCategogy->products->count(). ')' }}</td>
                         <td>{{ $productCategogy->slug }}</td>
                         <td>{{ $productCategogy->created_at }}</td>
                         <td>

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ProductCategoryController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->middleware('check.is.admin')->name('admin.')->group(function(){
@@ -25,4 +26,7 @@ Route::prefix('admin')->middleware('check.is.admin')->name('admin.')->group(func
     Route::resource('product', ProductController::class);
 
     Route::post('product-upload-image',[ProductController::class, 'uploadImage'])->name('product.image.upload');
+
+    Route::post('product/restore/{id}', [ProductController::class, 'restore'])->name('product.store');
+    Route::post('product/force-delete/{id}', [ProductController::class, 'forceDelete'])->name('product.force.delete');
 });

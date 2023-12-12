@@ -15,6 +15,7 @@
                 <!-- form start -->
                 {{ $errors ?? dd($errors->all()) }}
                 <form role="form" method="POST" action="{{ route('admin.product.update', ['product' => $product->id]) }}" enctype="multipart/form-data">
+                  @method('PATCH')
                   <div class="card-body">
                     <div class="form-group">
                       <label for="name">Name</label>

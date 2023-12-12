@@ -45,8 +45,10 @@
                     <tr>
                       <th>#</th>
                       <th>Name</th>
+                      <th>Product Category Name</th>
                       <th>Price</th>
                       <th>Created At</th>
+                      <th>Deleted At</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -56,8 +58,11 @@
                         {{-- <td>{{ ($page - 1) * $itemPerPage + $index + 1 }}</td> --}}
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $product->name }}</td>
+                        <td>{{ $product->productCategory->name }}</td>
+                        {{-- <td>{{ $product->product_category_name }}</td> --}}
                         <td>{{ $product->price }}</td>
                         <td>{{ $product->created_at }}</td>
+                        <td>{{ $product->deleted_at }}</td>
                         <td>
                           <a class="btn btn-primary" href="{{ route('admin.product.edit', ['product' => $product->id]) }}">Detail</a>
                           <form action="{{ route('admin.product.destroy', ['product' => $product->id]) }}" method="post">
@@ -65,6 +70,16 @@
                               @method('delete')
                               <button onclick="return confirm('Are you sure ?');" type="submit" class="btn btn-danger">Delete</button>
                           </form>
+                          @if($product->trashed())
+                            <form action="{{ route('admin.product.store', ['id' => $product->id]) }}" method="POST">
+                              @csrf
+                              <button type="submit" class="btn btn-success">Restore</button>
+                            </form>
+                            <form action="{{ route('admin.product.force.delete', ['id' => $product->id]) }}" method="POST">
+                              @csrf
+                              <button type="submit" class="btn btn-warning">Force Delete</button>
+                            </form>    
+                          @endif
                         </td>
                       </tr>
                     @empty

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,9 +18,8 @@ Route::get('/', function (){
     return view('client.layout.master');
 })->name('home');
 
-Route::get('home', function(){
-    return view('client.pages.home');
-});
+Route::get('home', [HomeController::class, 'index'])->name('home');
+
 Route::get('shop-grid', function(){
     return view('client.pages.shop-grid');
 });

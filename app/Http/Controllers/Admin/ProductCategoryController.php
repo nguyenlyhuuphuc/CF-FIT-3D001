@@ -49,12 +49,16 @@ class ProductCategoryController extends Controller
         $sort = $request->sort ?? 'latest';
         $direction = $sort === 'latest' ? "DESC" : "ASC";
 
-        $productCategoires = DB::table('product_category')
-        ->where('name', 'like', $keyword)
+        // $productCategoires = DB::table('product_category')
+        // ->where('name', 'like', $keyword)
+        // ->orWhere('slug', 'like', $keyword)
+        // ->orderBy('created_at', $direction)
+        // ->paginate(5);
+        $productCategoires = ProductCategory::withTrashed()
+          ->where('name', 'like', $keyword)
         ->orWhere('slug', 'like', $keyword)
         ->orderBy('created_at', $direction)
-        ->paginate(5);
-        // $productCategories = ProductCategory::all();
+        ->paginate(10);
 
         //Cach 1 : Pass variable to view
         return view('admin.pages.product_category.index', [

@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Product\StoreRequest;
+use App\Http\Requests\Admin\Product\UpdateRequest;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -15,7 +17,21 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::paginate(10);
+        // $products = Product::paginate(10);
+
+        //SELECT product.*, product_category.name as product_category_name
+        // FROM product
+        // LEFT JOIN product_category ON product_category.id = product.product_category_id;
+        //Query Builder
+        // $products = DB::table('product')
+        // ->leftJoin('product_category','product.product_category_id', '=', 'product_category.id')
+        // ->select('product.*', 'product_category.name as product_category_name')
+        // ->get();
+
+        //Eloquent
+        $products = Product::with('productCategory')->withTrashed()->paginate(10);
+
+        // dd($products);
 
         return view('admin.pages.product.index')->with('products', $products);
     }
@@ -72,6 +88,7 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $productCategories = ProductCategory::all();
+
         return view('admin.pages.product.detail')
         ->with('product',$product)
         ->with('productCategories', $productCategories);
@@ -80,9 +97,17 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateRequest $request, string $id)
     {
-        //
+        $product = Product::find($id);
+        // $product->name = $request->name;
+        // $product->save();
+        
+        $arrayData = $request->except('_token', '_method');
+    
+        $product->update($arrayData);
+
+        return redirect()->route('admin.product.index')->with('msg', 'Cap nhat san pham thanh cong');
     }
 
     /**
@@ -106,6 +131,18 @@ class ProductController extends Controller
             $url = asset('images/' . $fileName);
             return response()->json(['fileName' => $fileName, 'uploaded'=> 1, 'url' => $url]);
         }
+    }
+
+    public function restore($id){
+        $product = Product::withTrashed()->find($id);
+        $product->restore();
+        return redirect()->route('admin.product.index')->with('msg', 'Khoi phuc san pham thanh cong');
+    }
+
+    public function forceDelete($id){
+        $product = Product::withTrashed()->find($id);
+        $product->forceDelete();
+        return redirect()->route('admin.product.index')->with('msg', 'Xoa san pham thanh cong');
     }
 }
 
