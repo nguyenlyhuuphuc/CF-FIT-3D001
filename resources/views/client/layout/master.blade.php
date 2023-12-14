@@ -168,7 +168,7 @@
     <script src="{{ asset('client/js/mixitup.min.js') }}"></script>
     <script src="{{ asset('client/js/owl.carousel.min.js') }}"></script>
     <script src="{{ asset('client/js/main.js') }}"></script>
-
+    @yield('js-custom')
 
 
 </body>

@@ -40,7 +40,7 @@
               <!-- /.card-header -->
               <div class="card-body">
                 {{-- {{ dd($productCategories) }} --}}
-                <table class="table table-bordered" id="table-product-category">
+                <table class="table table-bordered" id="table-product">
                   <thead>                  
                     <tr>
                       <th>#</th>
@@ -99,7 +99,7 @@
                     @endfor --}}
                   {{-- <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
                 </ul> --}}
-                {{ $products->links() }}
+                {{-- {{ $products->links() }} --}}
               </div>
             </div>
             <!-- /.card -->
@@ -113,8 +113,8 @@
 
 @section('js-custom')
   <script>
-    // $(document).ready(function(){
-    //   let table = new DataTable('#table-product-category');
-    // });
+    $(document).ready(function(){
+      let table = new DataTable('#table-product');
+    });
   </script>
 @endsection

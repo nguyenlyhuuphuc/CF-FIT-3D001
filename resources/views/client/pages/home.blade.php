@@ -60,11 +60,11 @@
             @foreach ($featuredProducts as $featuredProduct)
             <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
                 <div class="featured__item">
-                    <div class="featured__item__pic set-bg" data-setbg="{{ asset('image/').$featuredProduct->image_url }}">
+                    <div class="featured__item__pic set-bg" data-setbg="{{ asset('images').'/'.$featuredProduct->image_url }}">
                         <ul class="featured__item__pic__hover">
                             <li><a href="#"><i class="fa fa-heart"></i></a></li>
                             <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                            <li data-url="{{ route('cart.add.item', ['id' => $featuredProduct->id]) }}" class="add-product-to-cart"><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
                         </ul>
                     </div>
                     <div class="featured__item__text">
@@ -362,4 +362,24 @@
     </div>
 </section>
 <!-- Blog Section End -->
+@endsection
+
+@section('js-custom')
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.add-product-to-cart').on('click', function(event){
+                event.preventDefault();
+                let url = $(this).data('url');
+
+                $.ajax({ // form
+                    url: url, //action,
+                    method: 'GET', //method,
+                    success: function(response){
+                        alert(response.message);
+                        $('.number-item-in-cart').html(response.numberItem);
+                    }
+                });
+            })
+        });
+    </script>
 @endsection

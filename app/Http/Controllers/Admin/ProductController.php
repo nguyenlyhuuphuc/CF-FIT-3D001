@@ -29,7 +29,7 @@ class ProductController extends Controller
         // ->get();
 
         //Eloquent
-        $products = Product::with('productCategory')->withTrashed()->paginate(10);
+        $products = Product::with('productCategory')->withTrashed()->get();
 
         // dd($products);
 
@@ -100,11 +100,19 @@ class ProductController extends Controller
     public function update(UpdateRequest $request, string $id)
     {
         $product = Product::find($id);
-        // $product->name = $request->name;
-        // $product->save();
+        $oldImage = $product->image_url;
         
-        $arrayData = $request->except('_token', '_method');
+        $arrayData = $request->except('_token', '_method', 'image_url');
     
+        $fileName = $this->storeImage($request);
+        if(!is_null($fileName)){
+            $arrayData['image_url'] = $fileName;
+
+            if(!is_null($oldImage)){
+                unlink(public_path('images')."/".$oldImage);
+            }
+        }
+        
         $product->update($arrayData);
 
         return redirect()->route('admin.product.index')->with('msg', 'Cap nhat san pham thanh cong');
