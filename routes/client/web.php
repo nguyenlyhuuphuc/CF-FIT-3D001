@@ -31,6 +31,4 @@ Route::get('shop-detail',function(){
 
 Route::get('cart/add-item/{id}', [CartController::class, 'add'])->name('cart.add.item');
 
-Route::get('cart', function(){
-    return view('client.pages.cart');
-});
+Route::get('cart', [CartController::class, 'index'])->name('cart.index');
