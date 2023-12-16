@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\ProductCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
@@ -19,8 +20,12 @@ class ProductFactory extends Factory
     {
         $arrayIds = \App\Models\ProductCategory::all()->pluck('id')->toArray();
 
+        $name = $this->faker->name;
+        $slug = Str::slug($name);
+
         return [
-            'name' => $this->faker->name,
+            'name' => $name,
+            'slug' => $slug,
             'price'=> $this->faker->randomFloat(2, 1, 99),
             'short_description' => $this->faker->text(),
             'description' => $this->faker->text(),

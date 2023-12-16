@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,9 @@ Route::get('shop-detail',function(){
     return view('client.pages.shop-detail');
 });
 
-Route::get('cart/add-item/{id}', [CartController::class, 'add'])->name('cart.add.item');
+Route::get('cart/add-item/{id}', [CartController::class, 'add'])
+->name('cart.add.item')->middleware('auth');
 
 Route::get('cart', [CartController::class, 'index'])->name('cart.index');
+
+Route::get('shop-detail/{slug}', [ProductController::class, 'getBySlug'])->name('product.get.by.slug');

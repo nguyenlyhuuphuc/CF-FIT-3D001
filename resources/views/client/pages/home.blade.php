@@ -68,7 +68,7 @@
                         </ul>
                     </div>
                     <div class="featured__item__text">
-                        <h6><a href="#">{{ $featuredProduct->name }}</a></h6>
+                        <h6><a href="{{ route('product.get.by.slug', ['slug' => $featuredProduct->slug]) }}">{{ $featuredProduct->name }}</a></h6>
                         <h5>${{ number_format($featuredProduct->price, 2) }}</h5>
                     </div>
                 </div>
@@ -377,6 +377,11 @@
                     success: function(response){
                         alert(response.message);
                         $('.number-item-in-cart').html(response.numberItem);
+                    },
+                    statusCode: {
+                        401: function() {
+                            window.location.href = "{{ route('login') }}";
+                        }
                     }
                 });
             })
