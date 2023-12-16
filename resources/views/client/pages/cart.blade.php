@@ -131,6 +131,7 @@
 
            $('.pro-qty .qtybtn').on('click', function(){
 
+                var element = $(this);
                 var qty = parseInt($(this).siblings('input').val());
 
                 if($(this).hasClass('dec')){
@@ -150,7 +151,7 @@
                             icon: "success"
                         });
                         $('.number-item-in-cart').html(response.numberItem);
-                        $(this).closest('tr').find('.shoping__cart__total').html("$ "+response.priceTotalItem);
+                        element.closest('tr').find('.shoping__cart__total').html("$ "+response.priceTotalItem);
                     },
                     statusCode: {
                         401: function() {
