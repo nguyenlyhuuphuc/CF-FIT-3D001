@@ -54,7 +54,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="#" class="primary-btn">ADD TO CARD</a>
+                    <a href="#" data-url="{{ route('cart.add.item', ['id' => $product->id ]) }}" class="product-add-to-cart primary-btn">ADD TO CARD</a>
                     <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
                     <ul>
                         <li><b>Availability</b> <span>In Stock</span></li>
@@ -84,4 +84,32 @@
     </div>
 </section>
 <!-- Product Details Section End -->
+@endsection
+
+@section('js-custom')
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.product-add-to-cart').on('click', function(event){
+                event.preventDefault();
+
+                var qty = $('.pro-qty').find('input').val();
+
+                var url = $(this).data('url') + '/' + qty;
+
+                $.ajax({ // form
+                    url: url, //action,
+                    method: 'GET', //method,
+                    success: function(response){
+                        alert(response.message);
+                        $('.number-item-in-cart').html(response.numberItem);
+                    },
+                    statusCode: {
+                        401: function() {
+                            window.location.href = "{{ route('login') }}";
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

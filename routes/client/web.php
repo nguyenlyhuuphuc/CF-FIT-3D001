@@ -30,9 +30,16 @@ Route::get('shop-detail',function(){
     return view('client.pages.shop-detail');
 });
 
-Route::get('cart/add-item/{id}', [CartController::class, 'add'])
+Route::get('cart/add-item/{id}/{qty?}', [CartController::class, 'add'])
 ->name('cart.add.item')->middleware('auth');
+Route::get('cart/delete-item/{id}', [CartController::class, 'delete'])
+->name('cart.delete.item')->middleware('auth');
+Route::get('cart/remove-cart', [CartController::class, 'remove'])
+->name('cart.remove.cart')->middleware('auth');
+Route::get('cart/update-item/{id}/{qty?}', [CartController::class, 'update'])
+->name('cart.update.item')->middleware('auth');
 
 Route::get('cart', [CartController::class, 'index'])->name('cart.index');
 
 Route::get('shop-detail/{slug}', [ProductController::class, 'getBySlug'])->name('product.get.by.slug');
+
