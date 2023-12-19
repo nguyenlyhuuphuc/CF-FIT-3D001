@@ -13,6 +13,10 @@ class CartController extends Controller
         return view('client.pages.cart')->with('cart', $cart);
     }
 
+    public function checkout(){
+        return view('client.pages.checkout');
+    }
+
     public function add($id, $qty = 1){
         $cart = session()->get('cart', []);
 
@@ -29,7 +33,8 @@ class CartController extends Controller
 
         return response()->json([
             'message'=> 'Them san pham vao gio hang thanh cong',
-            'numberItem' => count($cart)
+            'numberItem' => count($cart),
+            'totalPrice' => $this->calculateTotalPrice($cart)
         ]);
     }
 
@@ -43,7 +48,8 @@ class CartController extends Controller
 
         return response()->json([
             'message'=> 'Xoa san pham thanh cong',
-            'numberItem' => count($cart)
+            'numberItem' => count($cart),
+            'totalPrice' => $this->calculateTotalPrice($cart)
         ]);
     }
     
@@ -52,7 +58,8 @@ class CartController extends Controller
 
         return response()->json([
             'message'=> 'Xoa gio hang thanh cong',
-            'numberItem' => 0
+            'numberItem' => 0,
+            'totalPrice' => 0
         ]);
     }
 
@@ -72,7 +79,16 @@ class CartController extends Controller
         return response()->json([
             'message'=> 'Cap nhat san pham thanh cong',
             'numberItem' => count($cart),
-            'priceTotalItem' => $price
+            'priceTotalItem' => $price,
+            'totalPrice' => $this->calculateTotalPrice($cart)
         ]);
+    }
+    
+    private function calculateTotalPrice($cart){
+        $total = 0;
+        foreach($cart as $item){
+            $total += $item['price'] * $item['qty'];
+        }
+        return number_format($total, 2);
     }
 }

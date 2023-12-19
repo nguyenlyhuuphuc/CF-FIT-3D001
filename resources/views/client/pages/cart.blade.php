@@ -17,7 +17,11 @@
                             </tr>
                         </thead>
                         <tbody id="tbody-cart">
+                            @php $total = 0 @endphp
                             @foreach ($cart as $productId => $item)
+                                @php
+                                     $total += $item['price'] * $item['qty'];
+                                @endphp
                                 <tr id="item-{{ $productId }}">
                                     <td class="shoping__cart__item">
                                         <img width="100" src="{{ $item['image'] }}" alt="">
@@ -69,8 +73,8 @@
                     <div class="shoping__checkout">
                     <h5>Cart Total</h5>
                     <ul>
-                        <li>Subtotal <span>$454.98</span></li>
-                        <li>Total <span>$454.98</span></li>
+                        <li>Subtotal <span class="cart-subtotal">${{ number_format($total, 2) }}</span></li>
+                        <li>Total <span class="cart-total">${{ number_format($total, 2  ) }}</span></li>
                     </ul>
                     <a href="#" class="primary-btn">PROCEED TO CHECKOUT</a>
                 </div>
@@ -97,6 +101,8 @@
                         });
                         $('.number-item-in-cart').html(response.numberItem);
                         $('#item-'+ id).empty();
+                        $('.cart-subtotal').html('$' + response.totalPrice);
+                        $('.cart-total').html('$' + response.totalPrice);
                     },
                     statusCode: {
                         401: function() {
@@ -120,6 +126,8 @@
                         });
                         $('.number-item-in-cart').html(response.numberItem);
                         $('#tbody-cart').empty();
+                        $('.cart-subtotal').html('$' + response.totalPrice);
+                        $('.cart-total').html('$' + response.totalPrice);
                     },
                     statusCode: {
                         401: function() {
@@ -152,6 +160,8 @@
                         });
                         $('.number-item-in-cart').html(response.numberItem);
                         element.closest('tr').find('.shoping__cart__total').html("$ "+response.priceTotalItem);
+                        $('.cart-subtotal').html('$' + response.totalPrice);
+                        $('.cart-total').html('$' + response.totalPrice);
                     },
                     statusCode: {
                         401: function() {

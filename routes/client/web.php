@@ -40,6 +40,7 @@ Route::get('cart/update-item/{id}/{qty?}', [CartController::class, 'update'])
 ->name('cart.update.item')->middleware('auth');
 
 Route::get('cart', [CartController::class, 'index'])->name('cart.index');
+Route::get('checkout', [CartController::class, 'checkout'])->name('cart.checkout');
 
 Route::get('shop-detail/{slug}', [ProductController::class, 'getBySlug'])->name('product.get.by.slug');
 
