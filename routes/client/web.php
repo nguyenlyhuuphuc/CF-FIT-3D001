@@ -4,6 +4,8 @@ use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Mail\OrderClientEmail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/dashboard', function () {
@@ -39,8 +41,14 @@ Route::get('cart/remove-cart', [CartController::class, 'remove'])
 Route::get('cart/update-item/{id}/{qty?}', [CartController::class, 'update'])
 ->name('cart.update.item')->middleware('auth');
 
-Route::get('cart', [CartController::class, 'index'])->name('cart.index');
-Route::get('checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+Route::get('cart', [CartController::class, 'index'])->name('cart.index')->middleware('auth');
+Route::get('checkout', [CartController::class, 'checkout'])->name('cart.checkout')->middleware('auth');
+Route::post('place-order', [CartController::class, 'placeOrder'])->name('cart.place.order')->middleware('auth');
 
 Route::get('shop-detail/{slug}', [ProductController::class, 'getBySlug'])->name('product.get.by.slug');
 
+Route::get('test-send-mail', function(){
+    //use Illuminate\Support\Facades\Mail;
+    //use App\Mail\OrderClientEmail;
+    Mail::to('nguyenlyhuuphuc@gmail.com')->send(new OrderClientEmail());
+});

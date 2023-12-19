@@ -3,7 +3,15 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\OrderPaymentMethod;
 use App\Models\Product;
+use App\Models\User;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
@@ -14,7 +22,9 @@ class CartController extends Controller
     }
 
     public function checkout(){
-        return view('client.pages.checkout');
+        $cart = session()->get('cart', []);
+
+        return view('client.pages.checkout')->with('cart', $cart);
     }
 
     public function add($id, $qty = 1){
@@ -90,5 +100,58 @@ class CartController extends Controller
             $total += $item['price'] * $item['qty'];
         }
         return number_format($total, 2);
+    }
+
+    public function placeOrder(Request $request){
+        try{
+            DB::beginTransaction();
+
+            $order = Order::create([
+                'address' => $request->address,
+                'notes' => $request->notes,
+                'payment_method' => $request->payment_method,
+                'status' => 'pending',
+                'user_id' => Auth::user()->id
+            ]);
+
+            $cart = session()->get('cart', []);
+    
+            $total = 0;
+            foreach($cart as $productId => $item){
+                $total += $item['qty'] * $item['price'];
+                OrderItem::create([
+                    'name' => $item['name'],
+                    'price' => $item['price'],
+                    'qty' => $item['qty'],
+                    'order_id' => $order->id, 
+                    'product_id' => $productId,
+                ]);
+            }
+    
+            //Update record order
+            $order->subtotal = $total;
+            $order->total = $total;
+            $order->save();
+    
+            OrderPaymentMethod::create([
+                'total' => $total,
+                'payment_method' => $request->payment_method,
+                'status' => 'pending',
+                'order_id' => $order->id
+            ]);
+    
+            //Update user
+            $user = User::find(Auth::user()->id);
+            $user->phone = $request->phone;
+            $user->save();
+    
+            session()->put('cart', []);
+
+            DB::commit();
+            return redirect()->route('home')->with('msg', 'Dat hang thanh cong');
+        }catch(Exception $e){
+            DB::rollBack();
+            return redirect()->route('home')->with('msg', 'Dat hang that bai');
+        }
     }
 }
