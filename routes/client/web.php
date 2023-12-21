@@ -50,5 +50,8 @@ Route::get('shop-detail/{slug}', [ProductController::class, 'getBySlug'])->name(
 Route::get('test-send-mail', function(){
     //use Illuminate\Support\Facades\Mail;
     //use App\Mail\OrderClientEmail;
-    Mail::to('nguyenlyhuuphuc@gmail.com')->send(new OrderClientEmail());
+
+    // dd(config('my-config.name_test.a.b.c'));
+
+    // Mail::to('nguyenlyhuuphuc@gmail.com')->send(new OrderClientEmail());
 });

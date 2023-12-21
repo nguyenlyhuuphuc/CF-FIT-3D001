@@ -58,7 +58,7 @@ class ProductCategoryController extends Controller
           ->where('name', 'like', $keyword)
         ->orWhere('slug', 'like', $keyword)
         ->orderBy('created_at', $direction)
-        ->paginate(10);
+        ->paginate(env('PAGINATION_ITEM', 10));
 
         //Cach 1 : Pass variable to view
         return view('admin.pages.product_category.index', [

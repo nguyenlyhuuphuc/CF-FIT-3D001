@@ -10,7 +10,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class OrderClientEmail extends Mailable
+class OrderAdminEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -29,7 +29,7 @@ class OrderClientEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Confirmation Order',
+            subject: 'Order Admin',
         );
     }
 
@@ -39,7 +39,7 @@ class OrderClientEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mail.order.order_client_email',
+            view: 'mail.order.order_admin_email',
             with: [$this->order]
         );
     }

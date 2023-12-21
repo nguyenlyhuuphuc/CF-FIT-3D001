@@ -1,4 +1,7 @@
-<h2>Customer : {{ $order->user->name }}</h2>
+<h2>Customer Name: {{ $order->user->name }}</h2>
+<h2>Customer Phone: {{ $order->user->phone }}</h2>
+<h2>Order Addres: {{ $order->address }}</h2>
+<h2>Order Notes: {{ $order->notes }}</h2>
 
 <h2>Purchase date : {{ $order->created_at->format('d-m-Y H:i:s') }}</h2>
 

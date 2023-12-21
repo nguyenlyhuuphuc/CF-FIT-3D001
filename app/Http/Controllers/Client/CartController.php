@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Events\OrderEvent;
 use App\Http\Controllers\Controller;
+use App\Mail\OrderAdminEmail;
+use App\Mail\OrderClientEmail;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderPaymentMethod;
@@ -12,6 +15,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class CartController extends Controller
 {
@@ -148,6 +152,18 @@ class CartController extends Controller
             session()->put('cart', []);
 
             DB::commit();
+
+            //Tao su kien order event
+            event(new OrderEvent($order));
+
+            //Send email client
+            // Mail::to('nguyenlyhuuphuc@gmail.com')->send(new OrderClientEmail($order));
+
+            //Send email admin
+            // Mail::to('nguyenlyhuuphuc@gmail.com')->send(new OrderAdminEmail($order));
+
+            //Minus qty in product 
+
             return redirect()->route('home')->with('msg', 'Dat hang thanh cong');
         }catch(Exception $e){
             DB::rollBack();
