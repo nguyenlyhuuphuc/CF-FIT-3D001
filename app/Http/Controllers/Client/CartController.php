@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
 
 class CartController extends Controller
 {
@@ -153,16 +154,59 @@ class CartController extends Controller
 
             DB::commit();
 
-            //Tao su kien order event
-            event(new OrderEvent($order));
+            $paymentMethod = $request->payment_method;
 
-            //Send email client
-            // Mail::to('nguyenlyhuuphuc@gmail.com')->send(new OrderClientEmail($order));
+            if($paymentMethod === 'VNBANK'){
+                date_default_timezone_set('Asia/Ho_Chi_Minh');
 
-            //Send email admin
-            // Mail::to('nguyenlyhuuphuc@gmail.com')->send(new OrderAdminEmail($order));
-
-            //Minus qty in product 
+                $vnp_TxnRef = (string)$order->id; //Mã giao dịch thanh toán tham chiếu của merchant
+                $vnp_Amount = $order->total; // Số tiền thanh toán
+                $vnp_Locale = 'vn'; //Ngôn ngữ chuyển hướng thanh toán
+                $vnp_BankCode = 'VNBANK'; //Mã phương thức thanh toán
+                $vnp_IpAddr = $_SERVER['REMOTE_ADDR']; //IP Khách hàng thanh toán
+                $startTime = date("YmdHis");
+                $expire = date('YmdHis',strtotime('+15 minutes',strtotime($startTime)));
+    
+                $inputData = array(
+                    "vnp_Version" => "2.1.0",
+                    "vnp_TmnCode" => config('my-config.vnpay.tmn_code'),
+                    "vnp_Amount" => $vnp_Amount * 23500,
+                    "vnp_Command" => "pay",
+                    "vnp_CreateDate" => date('YmdHis'),
+                    "vnp_CurrCode" => "VND",
+                    "vnp_IpAddr" => $vnp_IpAddr,
+                    "vnp_Locale" => $vnp_Locale,
+                    "vnp_OrderInfo" => "Thanh toan GD:" . $vnp_TxnRef,
+                    "vnp_OrderType" => "other",
+                    "vnp_ReturnUrl" => route('call.back.vnpay'),
+                    "vnp_TxnRef" => $vnp_TxnRef,
+                    "vnp_ExpireDate" => $expire
+                );
+    
+                if (isset($vnp_BankCode) && $vnp_BankCode != "") {
+                    $inputData['vnp_BankCode'] = $vnp_BankCode;
+                }
+    
+                ksort($inputData);
+                $query = "";
+                $i = 0;
+                $hashdata = "";
+                foreach ($inputData as $key => $value) {
+                    if ($i == 1) {
+                        $hashdata .= '&' . urlencode($key) . "=" . urlencode($value);
+                    } else {
+                        $hashdata .= urlencode($key) . "=" . urlencode($value);
+                        $i = 1;
+                    }
+                    $query .= urlencode($key) . "=" . urlencode($value) . '&';
+                }
+    
+                $vnp_Url = config('my-config.vnpay.url') . "?" . $query;
+                $vnpSecureHash =   hash_hmac('sha512', $hashdata, config('my-config.vnpay.hash_secret'));
+                $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
+            
+                return Redirect::to($vnp_Url);
+            }
 
             return redirect()->route('home')->with('msg', 'Dat hang thanh cong');
         }catch(Exception $e){

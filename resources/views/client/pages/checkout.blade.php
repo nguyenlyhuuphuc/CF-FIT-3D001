@@ -61,14 +61,21 @@
                             <div class="checkout__input__checkbox">
                                 <label for="payment">
                                     COD
-                                    <input value="cod" name="payment_method" type="checkbox" id="payment">
+                                    <input value="cod" name="payment_method" type="radio" id="payment">
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
                             <div class="checkout__input__checkbox">
-                                <label for="paypal">
-                                    VNPay
-                                    <input value="vnpay" name="payment_method" type="checkbox" id="paypal">
+                                <label for="VNBANK">
+                                    Thanh toán qua thẻ ATM/Tài khoản nội địa
+                                    <input value="VNBANK" name="payment_method" type="radio" id="VNBANK">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="checkout__input__checkbox">
+                                <label for="INTCARD">
+                                    Thanh toán qua thẻ quốc tế
+                                    <input value="INTCARD" name="payment_method" type="radio" id="INTCARD">
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
