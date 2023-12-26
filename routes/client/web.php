@@ -3,11 +3,13 @@
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\ProductController;
+use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Requests\VNPaySerivce;
+use App\Http\Service\VNPaySerivce;
 use App\Mail\OrderClientEmail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -50,12 +52,6 @@ Route::get('shop-detail/{slug}', [ProductController::class, 'getBySlug'])->name(
 
 Route::get('call-back-vnpay', [VNPaySerivce::class, 'callBackVNPay'])->name('call.back.vnpay');
 
-Route::get('test-send-mail', function(){
-    dd($_SERVER);
-    //use Illuminate\Support\Facades\Mail;
-    //use App\Mail\OrderClientEmail;
-
-    // dd(config('my-config.name_test.a.b.c'));
-
-    // Mail::to('nguyenlyhuuphuc@gmail.com')->send(new OrderClientEmail());
-});
+Route::get('redirect-google', [GoogleController::class, 'redirect'])->name('google.redirect');
+ 
+Route::get('call-back-google', [GoogleController::class, 'callback'])->name('google.call.back');
