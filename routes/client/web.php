@@ -7,6 +7,8 @@ use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Service\VNPaySerivce;
 use App\Mail\OrderClientEmail;
+use App\Models\ProductCategory;
+use Database\Factories\ProductFactory;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
@@ -55,3 +57,35 @@ Route::get('call-back-vnpay', [VNPaySerivce::class, 'callBackVNPay'])->name('cal
 Route::get('redirect-google', [GoogleController::class, 'redirect'])->name('google.redirect');
  
 Route::get('call-back-google', [GoogleController::class, 'callback'])->name('google.call.back');
+
+Route::get('test-sms', function(){
+    $receiverNumber = '+84352405575';
+    $message = 'Xac nhan don hang thanh cong http://localhost:8000/order/detail/26';
+    $client = new \Twilio\Rest\Client(env('TWILIO_ACCOUNT_SID'), env('TWILIO_AUTH_TOKEN'));
+    $client->messages->create(
+        $receiverNumber, 
+        [
+            'from' => env('TWILIO_PHONE_NUMBER'),
+            'body' => $message
+        ]
+    );
+});
+
+Route::get('test-url', function (){
+    $builder = new \AshAllenDesign\ShortURL\Classes\Builder();
+
+    $shortURLObject = $builder->destinationUrl('http://localhost:8000/order/detail/26')->make();
+    $shortURL = $shortURLObject->default_short_url;
+});
+
+Route::get('test-delete', function(){
+    $productCategory = ProductCategory::find(10);
+    $productCategory->forceDelete();
+});
+
+Route::get('test-insert', function(){
+    ProductCategory::create([
+        'name' => 'aaaaaaaaa',
+        'slug' => 'aaaaaaaaa'
+    ]);
+});

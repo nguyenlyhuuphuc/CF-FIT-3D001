@@ -29,4 +29,8 @@ Route::prefix('admin')->middleware('check.is.admin')->name('admin.')->group(func
 
     Route::post('product/restore/{id}', [ProductController::class, 'restore'])->name('product.store');
     Route::post('product/force-delete/{id}', [ProductController::class, 'forceDelete'])->name('product.force.delete');
+
+    Route::get('dashboard', function (){
+        return view('admin.pages.dashboard');
+    });
 });

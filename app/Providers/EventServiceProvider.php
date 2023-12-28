@@ -6,6 +6,8 @@ use App\Events\OrderEvent;
 use App\Listeners\MinusQtyProduct;
 use App\Listeners\SendEmailToAdmin;
 use App\Listeners\SendEmailToClient;
+use App\Models\ProductCategory;
+use App\Observers\ProductCategoryObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -27,6 +29,10 @@ class EventServiceProvider extends ServiceProvider
             SendEmailToAdmin::class,
             MinusQtyProduct::class
         ]
+    ];
+
+    protected $observers = [
+        ProductCategory::class => [ProductCategoryObserver::class],
     ];
 
     /**
