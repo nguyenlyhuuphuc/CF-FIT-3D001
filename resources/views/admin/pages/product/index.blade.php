@@ -58,7 +58,7 @@
                         {{-- <td>{{ ($page - 1) * $itemPerPage + $index + 1 }}</td> --}}
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $product->name }}</td>
-                        <td>{{ $product->productCategory->name }}</td>
+                        <td>{{ !is_null($product->productCategory) ? $product->productCategory->name : "" }}</td>
                         {{-- <td>{{ $product->product_category_name }}</td> --}}
                         <td>{{ $product->price }}</td>
                         <td>{{ $product->created_at }}</td>

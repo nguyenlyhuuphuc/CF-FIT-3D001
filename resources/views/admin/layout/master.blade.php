@@ -66,21 +66,21 @@
             
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ route('admin.product_category') }}" class="nav-link active">
+                <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->route()->getName() === 'admin.dashboard' ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Dashboard</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.product_category') }}" class="nav-link {{ request()->route()->getName() === 'admin.product_category' ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Product Category</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="./index2.html" class="nav-link">
+                <a href="{{ route('admin.product.index') }}" class="nav-link {{ request()->route()->getName() === 'admin.product.index' ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Product</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="./index3.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Article</p>
                 </a>
               </li>
             </ul>

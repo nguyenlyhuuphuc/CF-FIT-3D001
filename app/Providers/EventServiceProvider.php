@@ -6,6 +6,7 @@ use App\Events\OrderEvent;
 use App\Listeners\MinusQtyProduct;
 use App\Listeners\SendEmailToAdmin;
 use App\Listeners\SendEmailToClient;
+use App\Listeners\SendMail;
 use App\Models\ProductCategory;
 use App\Observers\ProductCategoryObserver;
 use Illuminate\Auth\Events\Registered;
@@ -25,9 +26,10 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
         OrderEvent::class => [
-            SendEmailToClient::class,
-            SendEmailToAdmin::class,
-            MinusQtyProduct::class
+            // SendEmailToClient::class,
+            // SendEmailToAdmin::class,
+            MinusQtyProduct::class,
+            SendMail::class
         ]
     ];
 

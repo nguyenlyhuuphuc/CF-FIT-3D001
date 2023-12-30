@@ -6,12 +6,17 @@ use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Service\VNPaySerivce;
+use App\Jobs\TestJob;
 use App\Mail\OrderClientEmail;
 use App\Models\ProductCategory;
+use Carbon\Carbon;
 use Database\Factories\ProductFactory;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
+
+use function Laravel\Prompts\error;
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -88,4 +93,16 @@ Route::get('test-insert', function(){
         'name' => 'aaaaaaaaa',
         'slug' => 'aaaaaaaaa'
     ]);
+});
+
+Route::get('test-log', function(){
+    Log::info('Day la log cua tui');
+    Log::error('Day la error');
+    Log::critical('Day la critical');
+    Log::notice('notice');
+});
+
+Route::get('test-job', function(){
+    echo '<h1>'. Carbon::now()->format('d-m-Y H:i:s').'</h1>';
+    TestJob::dispatch();
 });

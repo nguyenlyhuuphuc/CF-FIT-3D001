@@ -8,6 +8,7 @@
             <div class="col-md-12">
                 Dashboard Chart
                 <div id="piechart" style="width: 900px; height: 500px;"></div>
+                <div id="columnchart_material" style="width: 800px; height: 500px;"></div>
             </div>
           </div>
         </div>
@@ -22,22 +23,34 @@
 
     function drawChart() {
 
-      var data = google.visualization.arrayToDataTable([
-        ['Name', 'Number'],
-        ['Work',     2],
-        ['Eat',      2],
-        ['Commute',  2],
-        ['Watch TV', 2],
-        ['Sleep',    2]
-      ]);
+      var data = google.visualization.arrayToDataTable(@json($result));
 
       var options = {
-        title: 'Product Category'
+        title: 'Order Status Summary'
       };
 
       var chart = new google.visualization.PieChart(document.getElementById('piechart'));
 
       chart.draw(data, options);
+    }
+  </script>
+  <script type="text/javascript">
+    google.charts.load('current', {'packages':['bar']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable(@json($resultOrderNumber));
+
+      var options = {
+        chart: {
+          title: 'Company Performance',
+          subtitle: 'Sales, Expenses, and Profit: 2014-2017',
+        }
+      };
+
+      var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+
+      chart.draw(data, google.charts.Bar.convertOptions(options));
     }
   </script>
 @endsection
