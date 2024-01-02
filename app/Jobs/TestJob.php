@@ -30,7 +30,7 @@ class TestJob implements ShouldQueue
      */
     public function handle(): void
     {        
-        throw new Exception('LoI roi');
+        // throw new Exception('LoI roi');
 
         Log::info('Day la job cua tui : {date}', ['date' => Carbon::now()->format('d-m-Y H:i:s')]);
     }
